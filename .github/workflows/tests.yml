@@ -1,0 +1,24 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+        
+    - name: build database
+      run: docker-compose -f ${{github.workspace}}/docker-compose.yml up --build -d db 
+
+    - name: build backend
+      run: docker-compose -f ${{github.workspace}}/docker-compose.yml up --build -d backend
+      
+    - name: tests
+      run: docker exec backend python manage.py test
+        
+    - name: Stop containers
+      if: always()
+      run: docker-compose -f ${{github.workspace}}/docker-compose.yml down
