@@ -3,11 +3,12 @@ from pathlib import Path
 import os
 import dj_database_url
 import django_heroku
+from .base import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY= os.environ.get('SECRET_KEY') 
 DEBUG = False 
-#ALLOWED_HOSTS = ['GameSeekers.herouapp.com']
+ALLOWED_HOSTS = ['game-seekers-backend.herouapp.com']
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 STATIC_URL = '/static/'

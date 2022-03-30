@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
@@ -22,3 +22,22 @@ jobs:
     - name: Stop containers
       if: always()
       run: docker-compose -f ${{github.workspace}}/docker-compose.yml down
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Deploying to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "<PROJECT-NAME>"
+        heroku_email: "<EMAIL-ADDRESS>"
+        healthcheck: "https://<PROJECT-NAME>.herokuapp.com/healthcheck"
+        rollbackonhealthcheckfailed: true
+      
+
+
+    

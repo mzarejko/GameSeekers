@@ -2,14 +2,25 @@ from django.test import TestCase
 from .models import User
 
 class UserTestCase(TestCase):
-    def SetUp(self):
-        user = User.objects.create(username="chuck noris",
-                            email="jfkwf@efe.com")
-        user.set_password('111111')
-        user.save()
-        print(user)
 
+    USERNAME = 'chuck noris'
+    EMAIL = 'test@test.com'
+    PASSWORD = 'hakunamatata'
+    
+    def setUp(self):
+        user = User(username=self.USERNAME,
+                    email=self.EMAIL)
+        user.set_password(self.PASSWORD)
+        user.save()
+        print('setup')
 
     def test_create_user(self):
-        user = User.objects.get(username="chuck noris")
+        user = User.objects.get(username=self.USERNAME)
         self.assertNotEqual(user, None)
+
+    def tearDown(self):
+        user = User.objects.get(username=self.USERNAME)
+        user.delete()
+        
+
+

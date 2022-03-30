@@ -14,11 +14,11 @@ services:
         ports:
             - "5432:5432"
     backend:
-        build: ./backend 
+        build: 
+            context: ./backend
+            dockerfile: ./develop_dockerfile
         container_name: backend
         restart: on-failure
-        volumes:
-            - ./backend:/app/backend
         command:  bash -c "python3 manage.py makemigrations && 
                            python3 manage.py migrate &&
                            python3 manage.py runserver 0.0.0.0:8000"
