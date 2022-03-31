@@ -7,13 +7,13 @@ from .base import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY= os.environ.get('SECRET_KEY') 
-DEBUG = False 
-ALLOWED_HOSTS = ['game-seekers-backend.herouapp.com']
+DEBUG = False
+ALLOWED_HOSTS = ['game-seekers-backend.herokuapp.com']
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
-STATIC_URL = '/static/'
+STATIC_URL = '/staticfiles/static/'
 STATIC_ROOT = 'static'
-MEDIA_URL = '/static/media/'
+MEDIA_URL = '/staticfiles/media/'
 
 INSTALLED_APPS += [
     "whitenoise.runserver_nostatic",

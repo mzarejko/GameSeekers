@@ -14,9 +14,7 @@ services:
         ports:
             - "5432:5432"
     backend:
-        build: 
-            context: ./backend
-            dockerfile: ./develop_dockerfile
+        build: ./backend/
         container_name: backend
         restart: on-failure
         command:  bash -c "python3 manage.py makemigrations && 
