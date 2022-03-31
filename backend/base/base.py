@@ -74,3 +74,5 @@ ROOT_URLCONF = 'base.urls'
 ASGI_APPLICATION = 'base.routing.application'
 WSGI_APPLICATION = 'base.wsgi.application'
 AUTH_USER_MODEL = 'accounts.User'
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True

@@ -12,7 +12,7 @@ RUN apt-get install -y netcat
 
 COPY . .
 
-RUN useradd user
-USER user
 
-EXPOSE 8000
+
+
+

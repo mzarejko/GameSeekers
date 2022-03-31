@@ -1,9 +1,7 @@
 from rest_framework.generics import ListAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from . import serializers
-from .models import User  
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
+from rest_framework.permissions import AllowAny
+from accounts import serializers
+from accounts.models import User  
 
 class GetUsers(ListAPIView):
     permission_classes = [AllowAny]
