@@ -1,10 +1,11 @@
 build:
     docker:
         web: Dockerfile
+        worker: Dockerfile
+
 run:
-    web: python manage.py makemigrations accounts && python manage.py migrate accounts && python manage.py runserver 0.0.0.0:$PORT
+    web: python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic && python manage.py runserver 0.0.0.0:$PORT
+    worker: celery -A base worker -l INFO
 release:
   image: web
-  command:
-    - python manage.py collectstatic 
 

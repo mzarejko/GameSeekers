@@ -13,10 +13,17 @@ services:
           - POSTGRES_PASSWORD=peja 
         ports:
             - "5432:5432"
+    redis:
+        image: redis
+        container_name: redis
+        restart: always
+        ports:
+          - "6379:6379"
     backend:
         build: ./backend/
         container_name: backend
         restart: on-failure
+        tty: true
         command:  bash -c "python3 manage.py makemigrations && 
                            python3 manage.py migrate &&
                            python3 manage.py runserver 0.0.0.0:8000"
@@ -24,3 +31,12 @@ services:
             - "8000:8000"
         depends_on:
             - db
+    celery:
+        build: ./backend
+        container_name: celery
+        command: bash -c "celery -A base worker -l debug"
+        restart: always
+        depends_on:
+            - db
+            - backend
+            - redis

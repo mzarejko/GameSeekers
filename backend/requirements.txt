@@ -8,4 +8,5 @@ gunicorn==20.1
 dj-database-url==0.5
 django-heroku==0.3
 whitenoise==5.3
-
+django-filter==2.4.0
+celery[redis]==4.4.2

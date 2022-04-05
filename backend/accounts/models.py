@@ -32,16 +32,21 @@ class CustomAccountManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=45)
-    email = models.EmailField(unique=True)
+    username = models.CharField(unique=True, max_length=45)
+    email = models.EmailField(max_length=65)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
 
     objects = CustomAccountManager()
 
-    USERNAME_FIELD = 'email' 
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username' 
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self):
         return self.email
+
+    def tokens(self):
+        token=RefreshToken.for_user(self)
+        return {"access": str(token.access_token),
+                "refresh": str(token)}
