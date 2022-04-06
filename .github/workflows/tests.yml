@@ -17,7 +17,7 @@ jobs:
       run: docker-compose -f ${{github.workspace}}/docker-compose.yml up --build -d backend
       
     - name: tests
-      run: docker exec backend python manage.py test
+      run: docker exec backend bash -c "python manage.py test" 
         
     - name: Stop containers
       if: always()

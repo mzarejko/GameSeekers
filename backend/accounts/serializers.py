@@ -2,14 +2,6 @@ from rest_framework import serializers
 from accounts.models import User 
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.contrib import auth
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-
-class UsernameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username']
 
 class RegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(required=True, write_only=True,
@@ -51,20 +43,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         raise ValidationError("validation error")
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True, write_only=True)
-    password = serializers.CharField(write_only=True, required=True)
+    username = serializers.CharField(required=True, write_only=True)
+    password = serializers.CharField(write_only=True, required=True, 
+                                     style={'input_type': 'password'})
     access = serializers.CharField(read_only=True)
     refresh = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'access', 'refresh']
+        fields = ['username', 'password', 'access', 'refresh']
 
     def validate(self, data):
-        email = data.get('email')
+        username = data.get('username')
         password = data.get('password')
 
-        user = auth.authenticate(email=email, password=password)
+        user = auth.authenticate(username=username, password=password)
 
         if user is None:
             raise AuthenticationFailed('wrong password or email')
@@ -76,39 +69,3 @@ class LoginSerializer(serializers.ModelSerializer):
         tokens = user.tokens()
         return {"access": tokens['access'],
                 "refresh": tokens['refresh']} 
-
-class ResetPasswordSerializer(serializers.Serializer):
-    
-    class Meta:
-        fields = ['email']
-
-class SetNewPasswordSerializer(serializers.Serializer):
-    password1 = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
-    token = serializers.CharField(write_only=True)
-    uidb64 = serializers.CharField(write_only=True)
-
-    class Meta:
-        fields = ['password1', 'password2', 'token', 'uidb64']
-
-    def validate(self, atr):
-        try:
-            password1 = atr.get('password1')
-            password2 = atr.get('password2')
-            token = atr.get('token')
-            uidb64 = atr.get('uidb64')
-
-            id = force_str(urlsafe_base64_decode(uidb64))
-            user = User.objects.get(id=id)
-            if not PasswordResetTokenGenerator().check_token(user, token):
-                raise AuthenticationFailed('link is invalid')
-            
-            if password1 == password2:
-                user.set_password(password1)
-                user.save()
-                return user
-            else:
-                raise ValidationError('passwords not match')
-        except:
-            raise ValidationError('bad request')
-        return super().validate(atr)

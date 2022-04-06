@@ -3,6 +3,7 @@ from pathlib import Path
 from .base import *
 import os
 from datetime import timedelta
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2m2exf+or)f$dj*hc(4w$#zzqkx!0$5^e#0cuey7^i&icxmc1m'
@@ -52,4 +53,5 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
-
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')

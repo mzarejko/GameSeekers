@@ -1,73 +1,78 @@
 from django.test import TestCase
 from accounts.models import User
-from rest_framework.test import RequestsClient
+from django.urls import reverse
+from rest_framework import status
+import json
+from rest_framework_simplejwt.tokens import RefreshToken
 
+class RegisterTests(TestCase):
 
-class RegistrationCase(TestCase):
-
-    USERNAME = 'chuck noris'
-    EMAIL = 'efefef.com'
-    PASSWORD = 'hakunamatata'
-    INVALID_PASSWORD = 'hakunkshfkhfjwo'
-    
     def setUp(self):
-        client = RequestsClient()
+        self.payload = {'username': 'czupakabra',
+                        'email': 'test@test.com', 
+                        'password1': 'test',
+                        'password2': 'test'}
 
-    def test_validate_password(self):
-        response = self.client.post('http://0.0.0.0:8000/v1/accounts/register/', json={
-            'username': self.USERNAME,
-            'email': self.EMAIL,
-            'password1': self.PASSWORD,
-            'password2': self.INVALID_PASSWORD
-        })
-        assert response.status_code == 400
+        self.invalid_payload = {'username': 'czupakabra',
+                                'email': 'test@test.com', 
+                                'password1': 'sest',
+                                'password2': 'test'}
+    def test_create_account(self):
+        url = reverse('register')
+        response = self.client.post(url, data=json.dumps(self.payload), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        user = User.objects.get(username='czupakabra')
+        user.delete()
 
-    def test_create_user(self):
-        response = self.client.post('http://0.0.0.0:8000/v1/accounts/register/', json={
-            'username': self.USERNAME,
-            'email': self.EMAIL,
-            'password1': self.PASSWORD,
-            'password2': self.PASSWORD
-        })
-        assert response.status_code == 201
+    def test_wrong_passwords(self):
+        url = reverse('register')
+        response = self.client.post(url, data=json.dumps(self.invalid_payload), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_validate_duplicated(self):
-        response = self.client.post('http://0.0.0.0:8000/v1/accounts/register/', json={
-            'username': self.USERNAME,
-            'email': self.EMAIL,
-            'password1': self.PASSWORD,
-            'password2': self.PASSWORD
-        })
-        assert response.status_code == 400
+class LoginLogoutTests(TestCase):
 
-        
-
-class LoginCase(TestCase):
-
-    USERNAME = 'chuck noris'
-    EMAIL = 'test@test.com'
-    PASSWORD = 'hakunamatata'
-    INVALID_PASSWORD = 'hakunkshfkhfjwo'
-    
     def setUp(self):
-        client = RequestsClient()
-        User.objects.create(username=self.USERNAME,
-                            email=self.EMAIL,
-                            password=self.PASSWORD,
-                            is_active=True,
-                            is_verfied=True)
+        self.payload = {'username': 'czupakabra',
+                        'password': 'test'}
 
-    def validate_login(self):
-        response = self.client.post('http://0.0.0.0:8000/v1/accounts/login/', json={
+        self.invalid_payload = {'username': 'czupakabra',
+                                'password': 'efef'}
 
-            'email': self.EMAIL,
-            'password': self.PASSWORD,
-        })
-        assert response.status_code == 200
-        assert response.access != None
-        assert response != None
-    
-    def tearDown(self):
-        user = User.objects.get(username=self.USERNAME)
+        user = User.objects.create(username='czupakabra',
+                            email='test@test.com',
+                            is_verified=True,
+                            is_active=True)
+        user.set_password('test')
+        user.save()
+
+    def test_login(self):
+        url = reverse('login')
+        response = self.client.post(url, data=json.dumps(self.payload), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        user = User.objects.get(username='czupakabra')
+        user.delete()
+
+    def test_wrong_login(self):
+        url = reverse('register')
+        response = self.client.post(url, data=json.dumps(self.invalid_payload), content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class LogoutTests(TestCase):
+
+    def setUp(self):
+        user = User.objects.create(username='czupakabra',
+                            email='test@test.com',
+                            is_verified=True,
+                            is_active=True)
+        user.set_password('test')
+        user.save()
+        self.refresh = user.tokens()['refresh']
+
+    def test_logout(self):
+        url = 'http://0.0.0.0:8000/v1/accounts/logout/?refresh='+self.refresh
+        response = self.client.post(url, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        user = User.objects.get(username='czupakabra')
         user.delete()
 

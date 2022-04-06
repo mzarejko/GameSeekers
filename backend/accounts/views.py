@@ -1,4 +1,3 @@
-from rest_framework.generics import ListAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from accounts import serializers
@@ -13,15 +12,6 @@ from django.conf import settings
 import jwt
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-
-class GetUsers(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = serializers.UsernameSerializer
-
-    def get_queryset(self):
-        users = User.objects.all()
-        return users
-
 
 class LoginAPI(APIView):
     permission_classes = [AllowAny]
@@ -46,7 +36,7 @@ class RegisterAPI(APIView):
 
             current_site = get_current_site(request).domain
             relativeLink = reverse('email-verfication')
-            absurl = 'https://'+current_site+relativeLink+"?token="+str(token)
+            absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
 
             email_body = f'Hi {user.username},\n Click this link to activate your account:  \n {absurl}'
             mail = {'text': email_body, 'who': user.email, 'header': 'Verfication'}
@@ -89,8 +79,10 @@ class LogoutAPI(APIView):
     )
     def post(self, request):
         try:
-            refresh_token = request.data['refresh']
+            refresh_token = request.GET.get("refresh")
             RefreshToken(refresh_token).blacklist()
         except TokenError:
-            return Response({'detail': 'Token is invalid or expired'})
-        return Response({'detail': 'Successful logout'}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'detail': 'Token is invalid or expired'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Successful logout'}, status=status.HTTP_200_OK)
+

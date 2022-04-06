@@ -19,9 +19,9 @@ class CustomAccountManager(BaseUserManager):
     def create_user(self, username, email, password, **other_fields):
         
         if username is None:
-            raise TypeError('Users shuld have a username')
+            raise TypeError('Users need username')
         if email is None:
-            raise TypeError('Users shuld have emali')
+            raise TypeError('Users need emali')
 
         email = self.normalize_email(email)
         
@@ -33,7 +33,7 @@ class CustomAccountManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=True, max_length=45)
-    email = models.EmailField(max_length=65)
+    email = models.EmailField( max_length=65)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)

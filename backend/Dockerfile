@@ -12,7 +12,3 @@ RUN apt-get install -y netcat
 
 COPY . .
 
-
-
-
-
