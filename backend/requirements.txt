@@ -11,3 +11,4 @@ whitenoise==6.0
 django-filter==21.1
 celery[redis]==4.4.2
 python-decouple
+Pillow==9.1

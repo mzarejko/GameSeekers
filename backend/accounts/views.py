@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from accounts import serializers
 from accounts.models import User  
@@ -14,11 +15,13 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 
-
 class LoginAPI(APIView):
     permission_classes = [AllowAny]
     
-    @swagger_auto_schema(tags=["accounts"], request_body=serializers.LoginSerializer)
+    @swagger_auto_schema(request_body=serializers.LoginSerializer,
+                         responses={'200': 'ok',
+                                    '400': 'validation error'}
+                         )
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -27,32 +30,49 @@ class LoginAPI(APIView):
 class RegisterAPI(APIView):
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(tags=["accounts"], request_body=serializers.RegisterSerializer)
+    def send_activation(self, user, token, request):
+
+        current_site = get_current_site(request).domain
+        relativeLink = reverse('email-verfication')
+        absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
+
+        email_body = f'Hi {user.username},\n Click this link to activate your account:  \n {absurl}'
+        mail = {'text': email_body, 'who': user.email, 'header': 'Verfication'}
+        send_email.delay(mail)
+
+    @swagger_auto_schema(request_body=serializers.RegisterSerializer,
+                         responses={'200': 'ok',
+                                    '400': 'validation error'}
+                         )
     def post(self, request):
         serializer = serializers.RegisterSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.create(data=request.data)
-
+        if  User.objects.filter(username=request.data["username"],
+                                email=request.data["email"],
+                                is_verified=False):
+            user = User.objects.get(username=request.data["username"],
+                                    is_verified=False)
+            serializer.validate(request.data)
+            user.set_password(request.data["password1"])
+            token = RefreshToken.for_user(user).access_token
+            self.send_activation(user, token, request)
+            
+        elif serializer.is_valid(raise_exception=True):
+            serializer.save()
             user = User.objects.get(email=serializer.data['email'])
             token = RefreshToken.for_user(user).access_token
-
-            current_site = get_current_site(request).domain
-            relativeLink = reverse('email-verfication')
-            absurl = 'http://'+current_site+relativeLink+"?token="+str(token)
-
-            email_body = f'Hi {user.username},\n Click this link to activate your account:  \n {absurl}'
-            mail = {'text': email_body, 'who': user.email, 'header': 'Verfication'}
-            send_email.delay(mail)
-            return Response({"Check your mail for activation link"}, status=status.HTTP_201_CREATED)
+            self.send_activation(user, token, request)
+        return Response({"Check your mail for activation link"}, status=status.HTTP_200_OK)
 
 class VerifyEmail(APIView):
     permission_classes = [AllowAny]
 
-    @swagger_auto_schema(tags=["accounts"], manual_parameters=[
-        openapi.Parameter('token',
-                          openapi.IN_QUERY,
-                          type=openapi.TYPE_STRING)
-    ])
+    @swagger_auto_schema(responses={'200': 'ok',
+                                    '400': 'validation error'},
+                        manual_parameters=[
+                            openapi.Parameter('token',
+                            openapi.IN_QUERY,
+                            type=openapi.TYPE_STRING)
+                        ])
     def get(self, request):
         token = request.GET.get('token')
 
@@ -73,8 +93,7 @@ class VerifyEmail(APIView):
 class LogoutAPI(APIView):
     permission_classes = [IsAuthenticated]
 
-    @swagger_auto_schema(tags=["accounts"],
-        manual_parameters=[
+    @swagger_auto_schema(manual_parameters=[
             openapi.Parameter('refresh',
                           openapi.IN_QUERY,
                           type=openapi.TYPE_STRING)

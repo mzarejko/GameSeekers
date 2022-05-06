@@ -57,6 +57,15 @@ SIMPLE_JWT = {
 EMAIL_HOST_USER=os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD=os.environ.get('EMAIL_HOST_PASSWORD')
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [os.environ.get('REDIS_URL')],
+        },
+    },
+}
+
 # this will automatically configure DATABASE and HOSTS 
 django_heroku.settings(locals())
 

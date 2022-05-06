@@ -2,6 +2,7 @@ import os
 
 INSTALLED_APPS = [
     'accounts',
+    'room',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -12,7 +13,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -68,7 +70,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend']
+        'django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 50
 }
 
 LANGUAGE_CODE = 'en-us'

@@ -33,7 +33,8 @@ class CustomAccountManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(unique=True, max_length=45)
-    email = models.EmailField( max_length=65)
+    email = models.EmailField(max_length=45)
+    image = models.ImageField(default="profile.png")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)

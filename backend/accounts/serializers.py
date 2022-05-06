@@ -3,6 +3,13 @@ from accounts.models import User
 from rest_framework.exceptions import ValidationError, AuthenticationFailed
 from django.contrib import auth
 
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ['username']
+
 class RegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(required=True, write_only=True,
                                       style={'input_type': 'password'})
@@ -12,35 +19,27 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-    
-    def create(self, data):
+    def validate(self, data):
         password1 = data['password1'] 
         password2 = data['password2'] 
 
         if password1 != password2:
             raise ValidationError('passwords not match')
-
-        if User.objects.filter(email=data['email'], 
-                               is_verified=False).exists():
-            user = User.objects.get(email=data['email'])
-            user.username = data['username']
-            user.password = data['password1']
-            user.save()
-            return user
-
-        elif User.objects.filter(email=data['email'], is_verified=True).exists():
+    
+        if User.objects.filter(email=data['email'], is_verified=True).exists():
             raise ValidationError("email already have account")
+        return data
 
-        elif not User.objects.filter(email=data['email']).exists():
-            user = User(
-                username=data['username'],
-                email=data['email'],
-            )
-            user.set_password(password1)
-            user.save()
-            return user
+    def create(self, data):
+        password1 = data['password1'] 
+        user = User(
+            username=data['username'],
+            email=data['email'],
+        )
+        user.set_password(password1)
+        user.save()
+        return user
 
-        raise ValidationError("validation error")
 
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, write_only=True)
