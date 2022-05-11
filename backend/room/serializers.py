@@ -59,24 +59,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
 class ChatSerializer(serializers.ModelSerializer):
     chat_name = serializers.CharField(required=False)
+    chat_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Chat
-        fields = ['chat_name']
-
-    def validate(self, data):
-        if Chat.objects.filter(chat_name=data['chat_name'], 
-                                   room=self.context.get('room')).exists():
-            raise ValidationError({'detail': 'chat with this name already exist in room'})  
-        return data
-            
-
-    def create(self, data):
-        if data['chat_name']:
-            chat = Chat(chat_name=data['chat_name'],
-                        room=self.context.get('room'))
-        else:
-            chat = Chat(room=self.context.get('room'))
-        chat.save()
-        return chat
-
+        fields = ['chat_name', 'chat_id']

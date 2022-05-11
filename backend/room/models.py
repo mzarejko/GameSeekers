@@ -43,3 +43,32 @@ class Chat(models.Model):
                           'date': str(message.date)[10:16]} for message in messages]
         return json_messages
      
+class Game(models.Model):
+    game_name = models.TextField(max_length=45, null=True)
+    publisher_name = models.TextField(max_length=45, null=True)
+    min_players = models.PositiveIntegerField(default=2,
+                                              validators=[MaxValueValidator(100)])
+    max_players = models.PositiveIntegerField(default=8,
+                                              validators=[MaxValueValidator(100)])
+
+class City(models.Model):
+    city_name = models.TextField(max_length=45, null=True)
+
+
+class Meeting(models.Model):
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    address = models.TextField(max_length=45, null=True)
+    city = models.ForeignKey(City, on_delete=models.PROTECT)
+    meeting_date = models.DateTimeField(auto_now_add=True, null=True)
+    number_of_participants = models.PositiveIntegerField(default=2,
+                                                         validators=[MaxValueValidator(100)])
+
+
+class MeetingStatus(models.Model):
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    status = [
+        ('Ca', 'Canceled'),
+        ('Fn', 'Finished'),
+        ('OG', 'Ongoing'),
+        ('SH', 'Scheduled'),
+    ]
