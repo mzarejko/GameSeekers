@@ -1,0 +1,27 @@
+[
+    {
+      "title": "Mafia",
+      "desc": "Gra numer 1 na liście",
+      "minplayers": 5,
+      "maxplayers": 15
+    },
+    {
+        "title": "Talisman",
+        "desc": "Gra numer 2 na liście",
+        "minplayers": 2,
+        "maxplayers": 6
+    },
+    {
+        "title": "Dark Souls",
+        "desc": "Gra numer 3 na liście",
+        "minplayers": 1,
+        "maxplayers": 4
+    },
+    {
+        "title": "Szachy",
+        "desc": "Gra numer 4 na liście",
+        "minplayers": 2,
+        "maxplayers": 2
+    }
+    
+  ]

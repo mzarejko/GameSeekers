@@ -98,14 +98,13 @@ class ChatAPI(ListCreateAPIView):
     serializer_class = ChatSerializer
 
     def perform_create(self, serializer):
-        if Chat.objects.filter(chat_name=serializer.data['chat_name'], 
+        if Chat.objects.filter(chat_name=self.request.data['chat_name'], 
                                    room=self.kwargs['room_name']).exists():
             return Response({'detail': 'chat with this name already exist in room'},
                             status=status.HTTP_400_BAD_REQUEST)  
         room = Room.objects.get(room_name = self.kwargs["room_name"])
-        if serializer.is_valid(raise_exceptions=True):
-            return serializer.save(room=room,
-                                   chat_name=serializer.data["chat_name"])
+        return serializer.save(room=room,
+                               chat_name=self.request.data["chat_name"])
 
     def get_queryset(self):
         chats = Chat.objects.filter(room=self.kwargs["room_name"])
@@ -119,18 +118,18 @@ class ManageChat(DestroyAPIView):
     @swagger_auto_schema(responses={'404': 'room not found',
                                     '200': 'ok'})
     def delete(self, _, room_name, chat_id):
-        if not Chat.objects.filter(room=room_name, chat_id=chat_id).exist():
-            return Response({"detail": "Chat not exist in room"}, status = status.HTTP_404_NOT_FOUND)
-        chat = Chat.objects.get(chat_id)
+        if not Chat.objects.filter(room=room_name, chat_id=chat_id).exists():
+            return Response({"detail": "Chat not exists in room"}, status = status.HTTP_404_NOT_FOUND)
+        chat = Chat.objects.get(chat_id=chat_id)
         chat.delete()
         return Response({'detail': 'Chat successfully deleted'}, status = status.HTTP_200_OK)
 
     @swagger_auto_schema(responses={'404': 'room not found',
                                     '200': 'ok'})
     def patch(self, requset, room_name, chat_id):
-        if Chat.objects.filter(chat_id=chat_id, 
+        if not Chat.objects.filter(chat_id=chat_id, 
                                    room=room_name).exists():
-            return Response({'detail': 'chat with this id not exist in room'},
+            return Response({'detail': 'chat not exists in room'},
                             status=status.HTTP_404_NOT_FOUND)
         chat = Chat.objects.get(chat_id=chat_id)
         serializer = ChatSerializer(chat, requset.data, partial=True)

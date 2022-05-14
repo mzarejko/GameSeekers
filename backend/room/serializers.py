@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from .models import Room, Chat
+from .models import Room, Chat, Game
 from accounts.serializers import UserSerializer
 from accounts.models import User
 from django.shortcuts import get_object_or_404
@@ -64,3 +64,15 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ['chat_name', 'chat_id']
+
+class GameSerializer(serializers.ModelSerializer):
+    publisher_name = serializers.CharField(required=False)
+    min_players = serializers.IntegerField(required=False)
+    max_players = serializers.IntegerField(required=False)
+
+    class Meta:
+        model = Game
+        fields = ['game_name', 'publisher_name', 'min_players', 'max_players']
+
+
+        

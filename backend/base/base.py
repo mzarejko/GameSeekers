@@ -1,6 +1,7 @@
 import os
 
 INSTALLED_APPS = [
+    'channels',
     'accounts',
     'room',
     'django.contrib.admin',

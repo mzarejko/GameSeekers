@@ -46,19 +46,20 @@ class RegisterAPI(APIView):
                          )
     def post(self, request):
         serializer = serializers.RegisterSerializer(data=request.data)
-        if  User.objects.filter(username=request.data["username"],
-                                email=request.data["email"],
-                                is_verified=False):
-            user = User.objects.get(username=request.data["username"],
-                                    is_verified=False)
+        if  User.objects.filter(email=request.data["email"],
+                                is_verified=False).exists():
+            user = User.objects.filter(email=request.data["email"],
+                                    is_verified=False).first()
             serializer.validate(request.data)
+            user.username = request.data["username"]
             user.set_password(request.data["password1"])
             token = RefreshToken.for_user(user).access_token
             self.send_activation(user, token, request)
             
         elif serializer.is_valid(raise_exception=True):
             serializer.save()
-            user = User.objects.get(email=serializer.data['email'])
+            user = User.objects.get(username = serializer.data['username'],
+                                    email=serializer.data['email'])
             token = RefreshToken.for_user(user).access_token
             self.send_activation(user, token, request)
         return Response({"Check your mail for activation link"}, status=status.HTTP_200_OK)

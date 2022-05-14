@@ -8,7 +8,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2m2exf+or)f$dj*hc(4w$#zzqkx!0$5^e#0cuey7^i&icxmc1m'
 DEBUG = True
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "staticfiles"),
@@ -60,7 +60,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
