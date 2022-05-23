@@ -21,18 +21,10 @@ class ContactPage extends React.Component {
     }
 
 
-    handleChange = (e) => {
-        if (e.target.value.length > 0 ) {
-            this.setState({
-                name: e.target.value,
-                isEmpty: false
-            })
-        } else {
-            this.setState({
-                name: e.target.value,
-                isEmpty: true
-            })
-        }
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value
+        });
     }
 
     
@@ -42,10 +34,10 @@ class ContactPage extends React.Component {
             <div className="contact">
                 <form onSubmit={this.handleSubmit}>
                     <h3>Tworzenie pokoju</h3>
-                    <textarea value={this.state.name} onChange={this.handleChange} placeholder="Nazwa pokoju"></textarea>
-                    <textarea value={this.state.gamename} onChange={this.handleChange} placeholder="Nazwa gry"></textarea>
-                    <textarea value={this.state.desc} onChange={this.handleChange} placeholder="Opis..."></textarea>
-                    <button>Utwórz</button>
+                    <textarea  onChange={this.handleChange} placeholder="Nazwa pokoju"></textarea>
+                    <textarea  onChange={this.handleChange} placeholder="Nazwa gry"></textarea>
+                    <textarea  onChange={this.handleChange} placeholder="Opis..."></textarea>
+                    <button onClick={this.handleSubmit}>Utwórz</button>
                 </form>
                 <Prompt
                     when={!this.state.isEmpty}

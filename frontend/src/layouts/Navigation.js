@@ -5,10 +5,11 @@ import "../styles/Navigation.css";
 import { Navbar, Nav, Container } from 'react-bootstrap'
 
 const list = [
-  { name: "start", path: "/", exact: true },
-  { name: "pokój", path: "/products" },
-  { name: "utwórz pokój", path: "/contact" },
-  { name: "lista", path: "/gamelist" },
+  { name: "Start", path: "/", exact: true },
+  
+  { name: "Utwórz pokój", path: "/contact" },
+  { name: "Lista pokojów", path: "/roomlist" },
+  { name: "Lista gier", path: "/gamelist"},
   { name: "logowanie", path: "/admin" },
 ]
 
