@@ -1,8 +1,6 @@
 from django.db import models 
 from accounts.models import User 
 from django.core.validators import MaxValueValidator
-import requests
-import xmltodict
 
 class Room(models.Model):
     room_name = models.TextField(max_length=45, primary_key=True)
@@ -52,43 +50,25 @@ class Game(models.Model):
                                               validators=[MaxValueValidator(100)])
     max_players = models.PositiveIntegerField(default=8,
                                               validators=[MaxValueValidator(100)])
-    @staticmethod
-    def get_games(data):
-        base = 'https://api.geekdo.com/xmlapi/boardgame/'
-        xml = requests.get(base+data['game_name'])
-        if xml.status_code == 200:
-            doc = xmltodict.parse(xml.text)
-            games = {}
-            if 'boardgame' in doc.keys():
-                for obj in doc['boardgames']['boardgame']:
-                    name = obj["name"]
-                    if type(name) is dict:
-                        if "@primary" in name.keys():
-                            games[name['#text']] = {"id": obj["@objectid"],
-                                                    "year": obj["yearpublished"]}
-                    else:
-                        games[name] = {"id": obj["@objectid"],
-                                        "year": obj["yearpublished"]}
-            return games
-
-class City(models.Model):
-    city_name = models.TextField(max_length=45, null=True)
-
 
 class Meeting(models.Model):
+    CANCELED = 'ca'
+    FINISHED = 'fn'
+    ONGOING = 'og'
+    SCHEDULED = 'sh' 
+
+    status_choices = [
+        (CANCELED, 'Canceled'),
+        (FINISHED, 'Finished'),
+        (ONGOING, 'Ongoing'),
+        (SCHEDULED, 'Scheduled'),
+    ]
+
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     address = models.TextField(max_length=45, null=True)
-    city = models.ForeignKey(City, on_delete=models.PROTECT)
-    meeting_date = models.DateTimeField(auto_now_add=True, null=True)
+    city = models.TextField()
+    meeting_date = models.DateField(null=True)
     number_of_participants = models.PositiveIntegerField(default=2,
                                                          validators=[MaxValueValidator(100)])
+    status = models.TextField(choices=status_choices, default=SCHEDULED)
 
-
-class MeetingStatus(models.Model):
-    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
-    status = [
-        ('Ca', 'Canceled'),
-        ('Fn', 'Finished'),
-        ('OG', 'Ongoing'),
-        ('SH', 'Scheduled'),
-    ]

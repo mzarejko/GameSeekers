@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from .models import Room, Chat, Game
+from .models import Room, Chat, Game, Meeting
 from accounts.serializers import UserSerializer
 from accounts.models import User
 from django.shortcuts import get_object_or_404
@@ -74,5 +74,30 @@ class GameSerializer(serializers.ModelSerializer):
         model = Game
         fields = ['game_name', 'publisher_name', 'min_players', 'max_players']
 
+class MeetingSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    meeting_date = serializers.DateField(format="%Y-%m-%d")
+    status_value = serializers.SerializerMethodField(read_only=True)
+    
+    class Meta:
+        fields = ['id', 'address', 'city', 'meeting_date', 'number_of_participants', 'status_value',
+                  'status']
+        model = Meeting
 
-        
+    def validate(self, data):
+        if data['number_of_participants'] > self.context.get('room').members.count():
+            raise ValidationError('number of participants can not be bigger then number of members in room')
+        return data
+
+    def create(self, data):
+        meeting = Meeting(room=self.context.get("room"),
+                          address = data["address"],
+                          city=data['city'],
+                          meeting_date = data["meeting_date"],
+                          number_of_participants = data["number_of_participants"],
+                          status = data["status"])
+        meeting.save()
+        return meeting
+
+    def get_status_value(self, obj):
+        return obj.get_status_display()

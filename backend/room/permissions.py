@@ -18,3 +18,10 @@ class IsOwnerOfMessage(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return obj.author == request.user
+
+class IsMemberOfRoom(permissions.BasePermission):
+    message="Only members of room can do this"
+
+    def has_object_permission(self, request, view, obj):
+        return request.user in obj.members.all()
+

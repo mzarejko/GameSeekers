@@ -10,17 +10,9 @@ from enum import Enum
 class Commands(str, Enum):
     FETCH_MESSAGES = 'fetch_messages'
     UPDATE_MESSAGES = 'update_messages'
-    # FETCH_GAMES = 'fetch_games'
 
 class ChatConsumer(WebsocketConsumer):
 
-    # def fetch_games(self, data):
-        # games = Game.get_games(data.get("game_name", ""))
-        # content = {
-            # 'command': Commands.FETCH_GAMES,
-            # 'games': games
-        # }
-        # self.send(text_data=json.dumps(content))
         
     def fetch_messages(self, data):
         chat = get_object_or_404(Chat, chat_id=data.get("chat_id"))
@@ -34,7 +26,7 @@ class ChatConsumer(WebsocketConsumer):
     def new_message(self, data):
         message = data.get("message")
         chat = get_object_or_404(Chat, chat_id = data.get('chat_id'))
-        if message:
+        if message and self.user in chat.room.members.all():
             message = Message.objects.create(author=self.user,
                                              content=message)
             chat.messages.add(message)
@@ -68,8 +60,6 @@ class ChatConsumer(WebsocketConsumer):
             self.fetch_messages(data)
         elif data['command'] == Commands.UPDATE_MESSAGES:
             self.new_message(data)
-        # elif data['command'] == Commands.FETCH_GAMES:
-            # self.fetch_games(data)
         else:
             raise Exception('Socket received wrong command!')
     

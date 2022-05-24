@@ -7,7 +7,7 @@ from .models import Room, Chat
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
-from .permissions import IsAdmin, IsNotAdmin
+from .permissions import IsAdmin, IsNotAdmin, IsMemberOfRoom
 from drf_yasg.utils import swagger_auto_schema
 
 
@@ -69,7 +69,7 @@ class LeaveRoom(APIView):
 
 
 class ManageRoom(DestroyAPIView):
-    permission_class = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = RoomSerializer
     queryset = Room.objects.all()
 
@@ -77,6 +77,7 @@ class ManageRoom(DestroyAPIView):
                                     '200': 'ok'})
     def delete(self, _, room_name):
         room = get_object_or_404(Room, room_name=room_name)
+        self.check_object_permissions(self.request, room)
         room.delete()
         return Response({'detail': 'Room successfully deleted'}, status = status.HTTP_200_OK)
 
@@ -84,6 +85,7 @@ class ManageRoom(DestroyAPIView):
                                     '200': 'ok'})
     def patch(self, requset, room_name):
         room = get_object_or_404(Room, room_name=room_name)
+        self.check_object_permissions(self.request, room)
         context = {"admin": requset.user,
                    "room_name": room}
         serializer = RoomSerializer(room, requset.data, partial=True, context=context)
@@ -94,7 +96,7 @@ class ManageRoom(DestroyAPIView):
 
 
 class ChatAPI(ListCreateAPIView):
-    permission_class = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin, IsMemberOfRoom]
     serializer_class = ChatSerializer
 
     def perform_create(self, serializer):
@@ -103,15 +105,18 @@ class ChatAPI(ListCreateAPIView):
             return Response({'detail': 'chat with this name already exist in room'},
                             status=status.HTTP_400_BAD_REQUEST)  
         room = Room.objects.get(room_name = self.kwargs["room_name"])
+        self.check_object_permissions(self.request, room)
         return serializer.save(room=room,
                                chat_name=self.request.data["chat_name"])
 
     def get_queryset(self):
+        room = Room.objects.get(room_name = self.kwargs["room_name"])
+        self.check_object_permissions(self.request, room)
         chats = Chat.objects.filter(room=self.kwargs["room_name"])
         return chats
 
 class ManageChat(DestroyAPIView):
-    permission_class = [IsAuthenticated, IsAdmin]
+    permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = ChatSerializer 
     queryset = Chat.objects.all()
 
@@ -121,6 +126,8 @@ class ManageChat(DestroyAPIView):
         if not Chat.objects.filter(room=room_name, chat_id=chat_id).exists():
             return Response({"detail": "Chat not exists in room"}, status = status.HTTP_404_NOT_FOUND)
         chat = Chat.objects.get(chat_id=chat_id)
+        room = Room.objects.get(room_name = room_name)
+        self.check_object_permissions(self.request, room)
         chat.delete()
         return Response({'detail': 'Chat successfully deleted'}, status = status.HTTP_200_OK)
 
@@ -132,6 +139,8 @@ class ManageChat(DestroyAPIView):
             return Response({'detail': 'chat not exists in room'},
                             status=status.HTTP_404_NOT_FOUND)
         chat = Chat.objects.get(chat_id=chat_id)
+        room = Room.objects.get(room_name = room_name)
+        self.check_object_permissions(self.request, room)
         serializer = ChatSerializer(chat, requset.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
