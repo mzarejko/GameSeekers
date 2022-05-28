@@ -1,18 +1,20 @@
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
-from .models import Room, Chat, Game, Meeting
+from .models import Room, Chat, Meeting
 from accounts.serializers import UserSerializer
 from accounts.models import User
 from django.shortcuts import get_object_or_404
+from dropDown.models import Game, City
 
 class RoomSerializer(serializers.ModelSerializer):
     members = UserSerializer(many=True, required=False)
     admin = serializers.SerializerMethodField(read_only=True)
     available = serializers.SerializerMethodField(read_only=True)
+    game_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Room
-        fields = ['room_name', 'maxsize', 'members', 'admin', 'available']
+        fields = ['room_name', 'maxsize', 'members', 'admin', 'available', 'game', 'game_name']
 
     def validate(self, data):
         room = self.context.get("room_name")
@@ -27,6 +29,7 @@ class RoomSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, data):
+        instance.game = data.get('game', instance.game)
         instance.room_name = data.get("room_name", instance.room_name)
         instance.maxsize = data.get("maxsize", instance.maxsize)
         if 'members' in data.keys():
@@ -40,7 +43,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     def create(self, data):
         room = Room(room_name=data.get('room_name'), maxsize=data.get('maxsize'),
-                    admin=self.context.get("admin"))
+                    admin=self.context.get("admin"), game=data.get('game'))
         room.save()
         if 'members' in data.keys():
             for member in data['members']:
@@ -57,6 +60,10 @@ class RoomSerializer(serializers.ModelSerializer):
     def get_admin(self, room):
         return room.admin.username
 
+    def get_game_name(self, room):
+        if room.game:
+            return room.game.game_name
+
 class ChatSerializer(serializers.ModelSerializer):
     chat_name = serializers.CharField(required=False)
     chat_id = serializers.IntegerField(read_only=True)
@@ -65,14 +72,6 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = ['chat_name', 'chat_id']
 
-class GameSerializer(serializers.ModelSerializer):
-    publisher_name = serializers.CharField(required=False)
-    min_players = serializers.IntegerField(required=False)
-    max_players = serializers.IntegerField(required=False)
-
-    class Meta:
-        model = Game
-        fields = ['game_name', 'publisher_name', 'min_players', 'max_players']
 
 class MeetingSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
@@ -85,6 +84,8 @@ class MeetingSerializer(serializers.ModelSerializer):
         model = Meeting
 
     def validate(self, data):
+        if 'city_name' in data.keys():
+            get_object_or_404(City, city_name=data['city_name'])
         if data['number_of_participants'] > self.context.get('room').members.count():
             raise ValidationError('number of participants can not be bigger then number of members in room')
         return data
@@ -92,7 +93,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     def create(self, data):
         meeting = Meeting(room=self.context.get("room"),
                           address = data["address"],
-                          city=data['city'],
+                          city=data['city_name'],
                           meeting_date = data["meeting_date"],
                           number_of_participants = data["number_of_participants"],
                           status = data["status"])

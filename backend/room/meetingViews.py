@@ -1,5 +1,4 @@
 from rest_framework.generics import ListCreateAPIView, DestroyAPIView
-from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .serializers import MeetingSerializer
 from .models import Meeting, Room
@@ -8,7 +7,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .permissions import IsAdmin, IsNotAdmin, IsMemberOfRoom
 from drf_yasg.utils import swagger_auto_schema
-
 
 class APIMeeting(ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsMemberOfRoom]
@@ -66,4 +64,6 @@ class ManageMeeting(DestroyAPIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({'detail': 'Meeting successfully updated'}, status = status.HTTP_200_OK)
+
+
 

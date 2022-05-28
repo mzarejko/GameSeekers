@@ -1,6 +1,7 @@
 from django.db import models 
 from accounts.models import User 
 from django.core.validators import MaxValueValidator
+from dropDown.models import Game, City
 
 class Room(models.Model):
     room_name = models.TextField(max_length=45, primary_key=True)
@@ -9,7 +10,7 @@ class Room(models.Model):
     maxsize = models.PositiveIntegerField(default=10,
                                           validators=[MaxValueValidator(100)])
     image = models.ImageField(default=None, null=True)
-
+    game = models.ForeignKey(Game, related_name='game_room', null=True, on_delete=models.SET_NULL)
 
 class Message(models.Model):
     author = models.ForeignKey(User, related_name='author_message', null=True, on_delete=models.SET_NULL)
@@ -43,13 +44,6 @@ class Chat(models.Model):
                           'date': str(message.date)[10:16]} for message in messages]
         return json_messages
      
-class Game(models.Model):
-    game_name = models.TextField(max_length=45)
-    publisher_name = models.TextField(max_length=45, null=True)
-    min_players = models.PositiveIntegerField(default=2,
-                                              validators=[MaxValueValidator(100)])
-    max_players = models.PositiveIntegerField(default=8,
-                                              validators=[MaxValueValidator(100)])
 
 class Meeting(models.Model):
     CANCELED = 'ca'
@@ -66,9 +60,10 @@ class Meeting(models.Model):
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     address = models.TextField(max_length=45, null=True)
-    city = models.TextField()
+    city = models.ForeignKey(City, related_name='city_room', on_delete=models.CASCADE)
     meeting_date = models.DateField(null=True)
     number_of_participants = models.PositiveIntegerField(default=2,
                                                          validators=[MaxValueValidator(100)])
     status = models.TextField(choices=status_choices, default=SCHEDULED)
+
 

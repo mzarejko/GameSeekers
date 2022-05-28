@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Room, Chat, Message, Game, Meeting
+from .models import Room, Chat, Message, Meeting
 
-admin.site.register([Room, Chat, Message, Meeting, Game])
+admin.site.register([Room, Chat, Message, Meeting])

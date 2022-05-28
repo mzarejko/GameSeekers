@@ -20,7 +20,8 @@ urlpatterns = [
                                  cache_timeout=0), name='swagger-ui'),
     path('admin/', admin.site.urls),
     path('v1/accounts/', include('accounts.urls')),
-    path('v1/room/', include('room.urls'))
+    path('v1/room/', include('room.urls')),
+    path('v1/', include('dropDown.urls'))
 ]
 
 urlpatterns + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

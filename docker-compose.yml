@@ -24,7 +24,9 @@ services:
         container_name: backend
         restart: on-failure
         tty: true
-        command:  bash -c "python3 manage.py makemigrations && 
+        command:  bash -c "python3 manage.py makemigrations accounts && 
+                           python3 manage.py makemigrations dropDown &&
+                           python3 manage.py makemigrations room &&
                            python3 manage.py migrate &&
                            python3 manage.py runserver 0.0.0.0:8000"
         ports:

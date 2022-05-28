@@ -4,6 +4,7 @@ INSTALLED_APPS = [
     'channels',
     'accounts',
     'room',
+    'dropDown',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
