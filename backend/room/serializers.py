@@ -14,7 +14,7 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['room_name', 'maxsize', 'members', 'admin', 'available', 'game', 'game_name']
+        fields = ['room_name', 'maxsize', 'city', 'members', 'admin', 'available', 'game', 'game_name']
 
     def validate(self, data):
         room = self.context.get("room_name")
@@ -29,6 +29,7 @@ class RoomSerializer(serializers.ModelSerializer):
         return data
 
     def update(self, instance, data):
+        instance.city = data.get('city', instance.city)
         instance.game = data.get('game', instance.game)
         instance.room_name = data.get("room_name", instance.room_name)
         instance.maxsize = data.get("maxsize", instance.maxsize)
@@ -43,7 +44,8 @@ class RoomSerializer(serializers.ModelSerializer):
 
     def create(self, data):
         room = Room(room_name=data.get('room_name'), maxsize=data.get('maxsize'),
-                    admin=self.context.get("admin"), game=data.get('game'))
+                    admin=self.context.get("admin"), game=data.get('game'),
+                    city=data.get('city'))
         room.save()
         if 'members' in data.keys():
             for member in data['members']:
@@ -79,13 +81,11 @@ class MeetingSerializer(serializers.ModelSerializer):
     status_value = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
-        fields = ['id', 'address', 'city', 'meeting_date', 'number_of_participants', 'status_value',
+        fields = ['id', 'address', 'meeting_date', 'number_of_participants', 'status_value',
                   'status']
         model = Meeting
 
     def validate(self, data):
-        if 'city_name' in data.keys():
-            get_object_or_404(City, city_name=data['city_name'])
         if data['number_of_participants'] > self.context.get('room').members.count():
             raise ValidationError('number of participants can not be bigger then number of members in room')
         return data
@@ -93,7 +93,6 @@ class MeetingSerializer(serializers.ModelSerializer):
     def create(self, data):
         meeting = Meeting(room=self.context.get("room"),
                           address = data["address"],
-                          city=data['city_name'],
                           meeting_date = data["meeting_date"],
                           number_of_participants = data["number_of_participants"],
                           status = data["status"])

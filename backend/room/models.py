@@ -7,6 +7,7 @@ class Room(models.Model):
     room_name = models.TextField(max_length=45, primary_key=True)
     members = models.ManyToManyField(User, related_name='room_memebers')
     admin = models.ForeignKey(User, related_name='admin_room', null=True, on_delete=models.SET_NULL)
+    city = models.ForeignKey(City, related_name='city_room', on_delete=models.CASCADE)
     maxsize = models.PositiveIntegerField(default=10,
                                           validators=[MaxValueValidator(100)])
     image = models.ImageField(default=None, null=True)
@@ -60,7 +61,6 @@ class Meeting(models.Model):
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     address = models.TextField(max_length=45, null=True)
-    city = models.ForeignKey(City, related_name='city_room', on_delete=models.CASCADE)
     meeting_date = models.DateField(null=True)
     number_of_participants = models.PositiveIntegerField(default=2,
                                                          validators=[MaxValueValidator(100)])
