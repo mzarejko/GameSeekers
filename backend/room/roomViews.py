@@ -73,6 +73,11 @@ class ManageRoom(DestroyAPIView):
     serializer_class = RoomSerializer
     queryset = Room.objects.all()
 
+    def get_permissions(self):
+        if self.request.method == 'PATCH':
+            return [IsAuthenticated()]
+        return [permission() for permission in self.permission_classes]
+
     @swagger_auto_schema(responses={'404': 'room not found',
                                     '200': 'ok'})
     def delete(self, _, room_name):
@@ -119,6 +124,11 @@ class ManageChat(DestroyAPIView):
     permission_classes = [IsAuthenticated, IsAdmin]
     serializer_class = ChatSerializer 
     queryset = Chat.objects.all()
+
+    def get_permissions(self):
+        if self.request.method == 'PATCH':
+            return [IsAuthenticated()]
+        return [permission() for permission in self.permission_classes]
 
     @swagger_auto_schema(responses={'404': 'room not found',
                                     '200': 'ok'})
