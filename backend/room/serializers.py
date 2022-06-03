@@ -35,6 +35,7 @@ class RoomSerializer(serializers.ModelSerializer):
         instance.maxsize = data.get("maxsize", instance.maxsize)
         if 'members' in data.keys():
             instance.members.clear()
+            instance.save()
             instance.members.add(self.context.get("admin"))
             for member in data['members']:
                 user = get_object_or_404(User, username=member['username'])
