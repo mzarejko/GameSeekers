@@ -59,7 +59,7 @@ class ManageMeeting(DestroyAPIView):
         room = Room.objects.get(room_name = room_name)
         self.check_object_permissions(self.request, room)
         context = {"room": room}
-        serializer = self.serializer_class(data=requset.data, context=context)
+        serializer = self.serializer_class(meeting, data=requset.data, partial=True, context=context)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({'detail': 'Meeting successfully updated'}, status = status.HTTP_200_OK)

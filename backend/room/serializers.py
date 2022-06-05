@@ -102,3 +102,4 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     def get_status_value(self, obj):
         return obj.get_status_display()
+
