@@ -11,7 +11,6 @@ from drf_yasg.utils import swagger_auto_schema
 class APIMeeting(ListCreateAPIView):
     permission_classes = [IsAuthenticated, IsMemberOfRoom]
     serializer_class = MeetingSerializer
-    queryset = Meeting.objects.all()
 
     @swagger_auto_schema(request_body=MeetingSerializer,
                          responses={'404': 'user not found',
@@ -27,11 +26,11 @@ class APIMeeting(ListCreateAPIView):
             serializer.save()
             return Response({'detail': 'Successfully created meeting'}, status=status.HTTP_200_OK)
 
-    def get(self, request, room_name):
-        room = get_object_or_404(Room, room_name = room_name)
+    def get_queryset(self):
+        room = get_object_or_404(Room, room_name = self.kwargs["room_name"])
         self.check_object_permissions(self.request, room)
-        return super().get(request, room_name)
-
+        chats = Meeting.objects.filter(room=self.kwargs["room_name"])
+        return chats
 
 class ManageMeeting(DestroyAPIView):
     permission_classes = [IsAuthenticated, IsMemberOfRoom]
