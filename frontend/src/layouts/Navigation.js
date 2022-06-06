@@ -5,11 +5,12 @@ import "../styles/Navigation.css";
 import { Navbar, Nav, Container } from 'react-bootstrap'
 
 const list = [
-  { name: "start", path: "/", exact: true },
-  { name: "pokój", path: "/products" },
-  { name: "utwórz pokój", path: "/contact" },
-  { name: "lista", path: "/gamelist" },
-  { name: "logowanie", path: "/admin" },
+  { name: "Start", path: "/", exact: true },
+
+  { name: "Utwórz pokój", path: "/createroom" },
+  { name: "Lista pokojów", path: "/roomlist" },
+  { name: "Lista gier", path: "/gamelist" },
+  { name: "logowanie", path: "/login" },
 ]
 
 const Navigation = () => {
@@ -17,13 +18,17 @@ const Navigation = () => {
   const [isNavExpanded, setIsNavExpanded] = useState(false)
   const menu = list.map(item => (
     <li>
-      <NavLink to={item.path} exact={item.exact ? item.exact : false}>{item.name}</NavLink>
+      <NavLink onClick={() => {
+          setIsNavExpanded(false)
+        }} to={item.path} exact={item.exact ? item.exact : false}>{item.name}</NavLink>
     </li>
   ))
 
   return (
     <nav className="navigation">
-      <a href="/" className="brand-name">
+      <a onClick={() => {
+          setIsNavExpanded(false)
+        }} href="/" className="brand-name">
         GameSeekers
       </a>
       <button

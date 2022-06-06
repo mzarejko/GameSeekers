@@ -101,7 +101,7 @@ class ManageRoom(DestroyAPIView):
 
 
 class ChatAPI(ListCreateAPIView):
-    permission_classes = [IsAuthenticated, IsAdmin, IsMemberOfRoom]
+    permission_classes = [IsAuthenticated, IsMemberOfRoom]
     serializer_class = ChatSerializer
 
     def perform_create(self, serializer):

@@ -1,0 +1,43 @@
+.register-page-container{
+    background-color: white;
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: black;
+    -webkit-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+    box-shadow: 8px 8px 24px 0px rgb(66, 68, 90);
+    align-items: center;
+}
+
+.register-page-container h1{
+    text-align: center;
+}
+
+.register-page-container p{
+    text-align: center;
+}
+
+.register-page-container button{
+    text-align: center;
+    width: 100px;
+    height: 40px;
+}
+.register-page-container input{
+    width: 300px;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+
+  
+
+  
+  
+  
+ 

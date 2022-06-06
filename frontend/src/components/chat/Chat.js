@@ -13,7 +13,7 @@ class Chat extends Component {
   }
 
   componentDidMount(){
-    const url = `ws://127.0.0.1:8000/chat/${this.props.chat_id}/?token=${localStorage.getItem('access_token')}`
+    const url = `ws://game-seekers-backend.herokuapp.com/chat/${this.props.chat_id}/?token=${localStorage.getItem('access_token')}`
     Socket.connect(url)
     this.prepareConection(()=> {
       Socket.addCallbacks(this.setMessages, this.addMessage)

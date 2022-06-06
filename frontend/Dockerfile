@@ -8,6 +8,7 @@ COPY package.json ./
 
 RUN npm install 
 RUN npm install -g npm
+RUN npm install --save react-toastify
 RUN npm install axios --save
 RUN npm install react-router-dom
 
@@ -18,4 +19,3 @@ CMD npm start
 
 
 EXPOSE 3000
-

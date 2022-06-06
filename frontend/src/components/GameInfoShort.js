@@ -9,6 +9,6 @@ const GameInforShort = ({ title, desc, minplayers, maxplayers }) => {
                 <p>Players: { minplayers }-{ maxplayers } </p>
         </div>
     );
-}
+}   
 
 export default GameInforShort

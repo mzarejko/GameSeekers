@@ -41,3 +41,19 @@
   position: relative;
   left: 80%;
 }
+
+.chatBlock {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.chatBlock p:hover {
+  cursor: pointer;
+}
+
+.chatBlock button {
+  width: 100px;
+}
+
