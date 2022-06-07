@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useState } from "react"
 import "../styles/Navigation.css";
-import { Navbar, Nav, Container } from 'react-bootstrap'
 
 const list = [
   { name: "Start", path: "/", exact: true },

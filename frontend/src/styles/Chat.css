@@ -42,18 +42,11 @@
   left: 80%;
 }
 
-.chatBlock {
-  position: sticky;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
+
+.actP {
+  background-color: yellow;
 }
 
-.chatBlock p:hover {
-  cursor: pointer;
+.inactP {
+  background-color: white;
 }
-
-.chatBlock button {
-  width: 100px;
-}
-

@@ -18,15 +18,21 @@ class RoomPage extends React.Component {
       admin: this.props.location.state.ad,
       available: this.props.location.state.av,
       currentUser: localStorage.getItem('currentUser'),
+      status: false,
+    }
+  }
+    componentDidMount(){
+      this.state.members.map((user) => { if (user.username == this.state.currentUser) { this.setState({status: true}) } }
+    
+    )
     }
 
-
-  }
+  
   render() {
-    let status = this.state.members.map((user) => { if (user.username == this.state.currentUser) { return 1 } }
-    )
-    {
-      if (status == 1 && this.state.currentUser != this.state.admin) return (
+    
+    console.log(this.state.status)
+    
+      if (this.state.status == true && this.state.currentUser != this.state.admin) {return (
         <RoomNormal
           room_name={this.state.room_name}
           maxsize={this.state.maxsize}
@@ -37,8 +43,8 @@ class RoomPage extends React.Component {
 
       );
     }
-    {
-      if (status == 1 && this.state.currentUser == this.state.admin) {
+    else {
+      if (this.state.status == true && this.state.currentUser == this.state.admin) {
 
         return (
           <RoomAdmin
@@ -51,9 +57,10 @@ class RoomPage extends React.Component {
 
         );
       }
-    }
-    {
-      if (status != 1) return (
+      else {
+    
+  
+      if (this.state.status != true) {return (
         <RoomJoin
           room_name={this.state.room_name}
           maxsize={this.state.maxsize}
@@ -64,12 +71,12 @@ class RoomPage extends React.Component {
 
       );
     }
-    {
-      if (this.state.available == 0) return (
+    else{
+      if (this.state.available == 0) {return (
         <RoomFull />
       );
     }
-    
+    else{
 
 
     return (
@@ -84,7 +91,7 @@ class RoomPage extends React.Component {
       </div>
 
     );
-  }
+  }}}}
 }
-
+}
 export default RoomPage;

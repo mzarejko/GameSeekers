@@ -76,7 +76,7 @@ class RoomAdmin extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="room-container">
                 <ChatList room={this.state.room_name} />
                 <p> Jesteś administratorem tego pokoju </p>
 
@@ -89,12 +89,13 @@ class RoomAdmin extends React.Component {
                 {this.state.members.map((item) => (
                     <p key={item.username}> {item.username}</p>))}
                 <MeetingInfo room_name={this.state.room_name} ifAdmin={ 1 }/>
+                <div className="buttons">
                 <Link to={{ pathname: "/editroom/:" + this.state.room_name, state: { room_name: this.state.room_name, admin: this.state.admin, members: this.state.members, maxsize: this.state.maxsize, game: this.state.game } }}>Edycja</Link>
                 <Link to={{ pathname: "/createmeeting", state: { room_name: this.state.room_name} }}>meeting create</Link>
-                <form onSubmit={this.handleDelete}>
-                    <button className="delete-button" type="submit">Usuń pokój</button>
+                <form  onSubmit={this.handleDelete}>
+                    <button className="btn" type="submit">Usuń pokój</button>
                 </form>
-
+                </div>
             </div>
         )
     }

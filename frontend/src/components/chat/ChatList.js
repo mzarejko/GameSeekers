@@ -9,6 +9,7 @@ class ChatList extends Component {
     this.state = {
       chats : [],
       currentChat : undefined,
+      typedMessage: '',
     }
   }
 
@@ -23,11 +24,9 @@ class ChatList extends Component {
             },
         }).then((res) => res.json())
             .then((json) => {
-              if (json.results != undefined){
-                this.setState({
-                  chats: json.results
-                })
-              }
+              this.setState({
+                chats: json.results
+              })
             })
     } catch (err) {
         console.log(err.message)
@@ -40,11 +39,34 @@ class ChatList extends Component {
     }
   }
 
-  rerenderChat = (item) => {
+  changeChat = (item) => {
     this.setState({currentChat : item.chat_id})
   }
 
+  updateMessageInput = (input) => {
+    this.setState({
+      typedMessage: input.target.value
+    })
+  }
 
+  createChat = () => {
+    console.log("test")
+    try {
+        fetch(
+            `https://game-seekers-backend.herokuapp.com/v1/room/${this.props.room}/chat/`, {
+            method: 'post',
+            body: JSON.stringify({"chat_name": this.state.typedMessage}),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            },
+        }).then((res) => {
+          window.location.reload()
+        })
+    } catch (err) {
+        console.log(err.message)
+    }
+  }
 
   render() {
     return (
@@ -52,14 +74,20 @@ class ChatList extends Component {
         {this.state.chats.map((item) => {
           if (this.state.chats != []){
             return (
-              <div onClick={() => {this.rerenderChat(item)}} key={item.chat_id}>
+              <div onClick={() => {this.changeChat(item)}} key={item.chat_id} className={this.state.currentChat == item.chat_id ? 'actP' : 'inactP'}>
                 <p>{item.chat_name}</p>
               </div>
             )
           }
         })}
         {this.renderChat()}
-        <button onClick={()=>{this.setState({currentChat : undefined})}}>exit chat</ button>
+        <input
+          onChange={this.updateMessageInput}
+          value={this.state.typedMessage}
+          type="text"
+          placeholder="create new chat"
+        />
+        <button onClick={this.createChat}>add</ button>
       </div>
     )
   }

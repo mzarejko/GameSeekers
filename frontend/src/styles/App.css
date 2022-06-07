@@ -1,4 +1,6 @@
 div.app {
+  font-family: open-sans;
+  font-size: 12px;
   display: flex;
   flex-direction: column;
   min-height: 100vh;

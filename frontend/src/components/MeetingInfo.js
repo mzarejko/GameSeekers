@@ -2,6 +2,7 @@ import React from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import Link from 'react-router-dom/Link';
 import { refreshToken } from '../actions/auth';
+import "../styles/Meeting.css"
 
 export default class MeetingInfo extends React.Component {
     constructor(props) {
@@ -108,15 +109,15 @@ export default class MeetingInfo extends React.Component {
             <div>
             {
                 items.map((item) => (
-                    <div className="roomListItem">
-                        <li>Data: {item.meeting_date}</li>
-                        <li>Addres: {item.address} </li>
-                        <li>Ile uczest: {item.number_of_participants} </li>
-                        <li>ID: {item.id}</li>
-                        <li>Status: {item.status_value}</li>
+                    <div className="meetingInfo">
+                        <p>Data: {item.meeting_date}</p>
+                        <p>Addres: {item.address} </p>
+                        <p>Ile uczest: {item.number_of_participants} </p>
+                        <p>ID: {item.id}</p>
+                        <p>Status: {item.status_value}</p>
                         <Link to={{ pathname: "/editmeeting/:" + this.state.room_name, state: { id: item.id, room_name: this.state.room_name, meeting_date: item.meeting_date, address: item.address, status: item.status, number_of_participants: item.number_of_participants } }}>Edycja</Link>
                         <form id={item.id} onSubmit={this.handleDelete}>
-                            <button className="delete-button" type="submit">Usuń pokój</button>
+                            <button className="btn" type="submit">Usuń pokój</button>
                         </form>
                     </div>
                 ))}

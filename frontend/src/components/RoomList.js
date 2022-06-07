@@ -124,7 +124,7 @@ class RoomList extends React.Component {
                                 
                                 </div>
                                 <div className="button">
-                                <Link to={{ pathname: "/room/:" + item.room_name, state: { rm: item.room_name, ad: item.admin, mm: item.members, av: item.available, ms: item.maxsize, games: [] } }}>Wejdz</Link>
+                                <Link to={{ pathname: "/room/:" + item.room_name, state: { rm: item.room_name, ad: item.admin, mm: item.members, av: item.available, ms: item.maxsize } }}>{(item.members.map(({ username }) => username)).includes(localStorage.getItem("currentUser")) ? "Wejdź" : "Dołącz"}</Link>
                             </div>
                             </div>
                         ))}
