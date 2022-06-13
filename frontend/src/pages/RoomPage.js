@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 import RoomNormal from '../components/RoomNormal';
 import RoomAdmin from '../components/RoomAdmin';
 import RoomFull from '../components/RoomFull';
@@ -29,9 +28,6 @@ class RoomPage extends React.Component {
 
   
   render() {
-    
-    console.log(this.state.status)
-    
       if (this.state.status == true && this.state.currentUser != this.state.admin) {return (
         <RoomNormal
           room_name={this.state.room_name}
@@ -78,7 +74,6 @@ class RoomPage extends React.Component {
     }
     else{
 
-
     return (
       <div>
         <p> {this.state.room_name}</p>
@@ -94,4 +89,5 @@ class RoomPage extends React.Component {
   }}}}
 }
 }
+
 export default RoomPage;

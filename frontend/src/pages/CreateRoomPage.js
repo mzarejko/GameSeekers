@@ -1,7 +1,8 @@
 import React from 'react';
-import '../styles/ContactPage.css';
+import '../styles/CreateRoom.css';
 import { Prompt } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 class CreateRoomPage extends React.Component {
@@ -12,7 +13,6 @@ class CreateRoomPage extends React.Component {
             maxsize: "",
             game: "",
             currentUser: localStorage.getItem('currentUser'),
-            game: "",
             city: "",
             isEmpty: true,
             games: [],
@@ -144,10 +144,10 @@ class CreateRoomPage extends React.Component {
 
     render() {
         return (
-            <div className="contact">
+            <div className="create-room">
                 <form onSubmit={this.handleSubmit}>
                     <h3>Tworzenie pokoju</h3>
-                    <input name="room_name" type="text" value={this.state.name} onChange={this.handleChange} placeholder="Nazwa pokoju"></input>
+                    <input name="room_name" type="text" value={this.state.room_name} onChange={this.handleChange} placeholder="Nazwa pokoju"></input>
                     <select name="game" value={this.state.game} onChange={this.handleChange} disabled={this.state.fetchingGames}>
                         {this.state.games.map(({ id, game_name }) => (
                             <option key={id} value={id}>{game_name}</option>
@@ -159,7 +159,7 @@ class CreateRoomPage extends React.Component {
                             <option key={city_name} value={city_name}>{city_name}</option>
                         ))}
                     </select>
-                    <button type="submit">Utwórz</button>
+                    <button className='btn' type="submit">Utwórz</button>
                 </form>
                 <Prompt
                     when={this.state.isEmpty}

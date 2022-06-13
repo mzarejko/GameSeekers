@@ -50,7 +50,7 @@
     background: linear-gradient(90deg, yellow, orange, red,yellow);
     background-size: 400%;
     border-radius: 10px;
-    z-index: 1;
+    
   }
   .btn:hover {
     animation: animate 8s linear infinite;

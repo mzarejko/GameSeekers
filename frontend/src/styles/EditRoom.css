@@ -1,0 +1,19 @@
+table.table input{
+    width: 20px;
+}
+table.table{
+    width: 100%
+}
+table.table th{
+    width: 30%
+}
+table.table td{
+    width: 70%;
+    text-align: center;
+}
+.meeting-form select{
+    width: 300px;
+    height: 30px;
+    border-radius: 5px;
+    text-align: center;
+}

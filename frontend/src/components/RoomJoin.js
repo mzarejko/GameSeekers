@@ -84,9 +84,7 @@ class RoomJoin extends React.Component {
             <h1>coś nie tak
 
             </h1>
-        </div>
-             
-        
+        </div> 
     )}
 }
 

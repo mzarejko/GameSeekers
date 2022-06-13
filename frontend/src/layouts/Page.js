@@ -16,6 +16,7 @@ import EditMeetingPage from '../pages/EditMeetingPage';
 import RegisterPage from '../pages/RegisterPage';
 
 
+
 const Page = () => {
   return (
     <div className='page-container'>
@@ -31,6 +32,7 @@ const Page = () => {
         <Route path="/editroom/:room_name" component={EditRoomPage} />
         <Route path="/createmeeting/" component={CreateMeetingPage} />
         <Route path="/editmeeting/" component={EditMeetingPage} />
+
         <Route component={ErrorPage} />
       </Switch>
     </div>

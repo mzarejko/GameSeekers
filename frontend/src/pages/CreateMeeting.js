@@ -86,14 +86,14 @@ class CreateMeetingPage extends React.Component {
         console.log(this.state.meeting_date)
         console.log(this.state.address)
         return (
-            <div className="contact">
+            <div className="meeting-form">
                 <form onSubmit={this.handleSubmit}>
                     <h3>Tworzenie spotkania { this.state.room_name}</h3>
                     <input type="date"  name="meeting_date" value={this.state.meeting_date} onChange={this.handleChange}></input>
-                    <input name="address" type="text" value={this.state.address } onChange={this.handleChange} placeholder="Maksymalna liczba graczy"></input>
-                    <input type="number"  name="number_of_participants" onChange={this.handleChange} value={this.state.number_of_participants}></input>
-                    <input type="text"  name="status" onChange={this.handleChange} value={this.state.status}></input>
-                    <button type="submit">Utwórz</button>
+                    <input name="address" type="text" value={this.state.address } onChange={this.handleChange} placeholder="Adres"></input>
+                    <input type="number"  name="number_of_participants" onChange={this.handleChange} value={this.state.number_of_participants} placeholder="Liczba graczy"></input>
+                    <input type="text"  name="status" onChange={this.handleChange} value={this.state.status} placeholder="Status"></input>
+                    <button className='btn' type="submit">Utwórz</button>
                 </form>
                 <Prompt
                     when={this.state.isEmpty}

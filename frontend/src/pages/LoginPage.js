@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { login, logout } from '../actions/auth';
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -7,10 +8,10 @@ import "../styles/LoginPage.css";
 
 
 class LoginPage extends React.Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props)
-        this.state={
+        this.state = {
             username: "",
             password: "",
             redirect: "",
@@ -24,6 +25,16 @@ class LoginPage extends React.Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+    }
+
+    login_user = (e) => {
+        e.preventDefault();
+        login(this.state.username, this.state.password)
+    }
+
+    logout_user = (e) => {
+        e.preventDefault();
+        logout()
     }
 
     submit = () => {
@@ -48,7 +59,7 @@ class LoginPage extends React.Component {
         else{
             return (
             
-            <div className="login-page-container">
+            <div className="login-page-container" hidden={localStorage.getItem("currentUser")!=null}>
                 <h1>Logowanie</h1>
                 <input
                     name="username"
@@ -68,7 +79,12 @@ class LoginPage extends React.Component {
                 <button className='btn' onClick={this.submit}>login</button>
                 </div>
                 <p>If you don't have account -{'>'} <Link to={{ pathname: "/register" }}>Register</Link></p> 
-            </div>
+
+            
+           <form onSubmit={this.logout_user} hidden={localStorage.getItem("currentUser")==null}>
+                    <button className='btn' type="submit">Logout</button>
+                </form>
+                </div>
         );
     }
 }}

@@ -89,9 +89,9 @@ class Chat extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <ul className='chat'>
+      <div className='chatbox'>
+        <div className='chat'>
+          <ul>
             {this.renderMessages(this.state.messages)}
           </ul>
         </div>

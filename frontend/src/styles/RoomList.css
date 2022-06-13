@@ -62,7 +62,6 @@ box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
     background: linear-gradient(90deg, yellow, orange, red,yellow);
     background-size: 400%;
     border-radius: 10px;
-    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;

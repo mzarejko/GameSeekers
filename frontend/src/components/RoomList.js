@@ -77,6 +77,7 @@ class RoomList extends React.Component {
     render() {
         const DataisLoaded = this.state.DataisLoaded;
         const items = this.state.items;
+
         let games_dict = {}
         this.state.games.map(({ id, game_name }) => (
             games_dict[id] = game_name
@@ -98,9 +99,12 @@ class RoomList extends React.Component {
                 </div>
             ))
         } catch (error) {
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('refresh_token')
+            localStorage.removeItem('currentUser')
             return <Redirect to='/login' />;
         }
-        if (this.state.error == true) {
+        if (this.state.error === true) {
             return (
                 <div className="room-list">
                     <h1> Room List </h1>  {
@@ -128,8 +132,6 @@ class RoomList extends React.Component {
                             </div>
                             </div>
                         ))}
-
-
                 </div>
             );
         }

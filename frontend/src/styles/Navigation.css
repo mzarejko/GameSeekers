@@ -143,7 +143,7 @@ nav.main li:nth-child(4) a.active {
       left: 0;
       flex-direction: column;
       width: 100%;
-      height: calc(100vh - 77px);
+      height: calc(100vh - 60px);
       background-color: white;
       border-top: 1px solid black;
     }

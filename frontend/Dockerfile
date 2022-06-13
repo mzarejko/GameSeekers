@@ -11,6 +11,7 @@ RUN npm install -g npm
 RUN npm install --save react-toastify
 RUN npm install axios --save
 RUN npm install react-router-dom
+RUN npm install react-icons 
 
 
 COPY . ./
