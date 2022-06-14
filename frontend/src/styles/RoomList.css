@@ -2,11 +2,35 @@
     border-radius: 10px;
     margin: 20px;
     display: flex;
-width: 45%;
+width: 44%;
 padding: 10px;
 -webkit-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
 -moz-box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
 box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
+}
+.button a {
+    
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    
+    color: #fff;
+   
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: sans-serif;
+    box-sizing: border-box;
+    background: linear-gradient(90deg, yellow, orange, red,yellow);
+    background-size: 400%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+.roomListItem a{
+    width: 100%;
 }
 
 .room-list{
@@ -47,25 +71,7 @@ box-shadow: 8px 8px 24px 0px rgba(66, 68, 90, 1);
     align-items: center;
 }
 
-.button a {
-    
-    width: 100px;
-    height: 40px;
-    text-align: center;
-    
-    color: #fff;
-   
-    text-transform: uppercase;
-    text-decoration: none;
-    font-family: sans-serif;
-    box-sizing: border-box;
-    background: linear-gradient(90deg, yellow, orange, red,yellow);
-    background-size: 400%;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+
   .button a:hover {
     animation: animate 8s linear infinite;
   }

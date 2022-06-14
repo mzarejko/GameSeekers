@@ -1,5 +1,5 @@
 import React from "react";
-import '../styles/RoomList.css';
+import '../styles/GameList.css';
 import { Link } from 'react-router-dom';
 import { Redirect } from "react-router-dom";
 
@@ -64,16 +64,18 @@ class GamesPage extends React.Component {
         }
         if (this.state.error==true) {
         return (
-            <div className="App">
-                <h1> Games List </h1>  {
+            <div className="game-list">
+                <h1> Lista Gier </h1>
+                <div className="game-list-container">  {
                     items.results.map((item) => (
                         <div className="gamesListItem">
-                            <li>Nazwa gry: {item.game_name}</li>
-                            <li>Wydawca: {item.publisher_name}</li>
-                            <li>Ilość graczy: {item.min_players}-{item.max_players}</li>
+                            <p>Nazwa gry: <span>{item.game_name}</span></p>
+                            <p>Wydawca: <span>{item.publisher_name}</span></p>
+                            <p>Ilość graczy: <span>{item.min_players}-{item.max_players}</span></p>
                             
                         </div>
                     ))}
+                    </div>
 
                 
             </div>

@@ -9,7 +9,7 @@ const list = [
   { name: "Utwórz pokój", path: "/createroom" },
   { name: "Lista pokojów", path: "/roomlist" },
   { name: "Lista gier", path: "/gamelist" },
-  { name: "logowanie", path: "/login" },
+  { name: "Logowanie", path: "/login" },
 ]
 
 const Navigation = () => {

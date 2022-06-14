@@ -18,6 +18,7 @@ class RoomPage extends React.Component {
       available: this.props.location.state.av,
       currentUser: localStorage.getItem('currentUser'),
       status: false,
+      game_name: this.props.location.game_name
     }
   }
     componentDidMount(){
@@ -35,6 +36,7 @@ class RoomPage extends React.Component {
           members={this.state.members}
           admin={this.state.admin}
           available={this.state.available}
+          game_name={this.state.game_name}
         />
 
       );
@@ -49,6 +51,7 @@ class RoomPage extends React.Component {
             members={this.state.members}
             admin={this.state.admin}
             available={this.state.available}
+            game_name={this.state.game_name}
           />
 
         );
@@ -63,6 +66,7 @@ class RoomPage extends React.Component {
           members={this.state.members}
           admin={this.state.admin}
           available={this.state.available}
+          game_name={this.state.game_name}
         />
 
       );

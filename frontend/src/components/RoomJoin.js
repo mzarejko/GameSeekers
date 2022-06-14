@@ -1,6 +1,7 @@
 import React from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Redirect } from 'react-router-dom';
 
 class RoomJoin extends React.Component {
 
@@ -34,7 +35,7 @@ class RoomJoin extends React.Component {
     componentDidMount() {
         try {
             fetch(
-                "https://game-seekers-backend.herokuapp.com/v1/room/?room_name=" + this.state.room_name, {
+                "https://game-seekers-backend.herokuapp.com/v1/room/" + this.state.room_name +"/join", {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,14 +62,9 @@ class RoomJoin extends React.Component {
                             progress: undefined,
                         });
                     })
-                    this.props.history.push({ pathname: "/room/:" + this.state.room_name, state: { rm: this.state.room_name, ad: this.state.currentUser, mm: [{ username: this.state.currentUser }], av: this.state.maxsize - 1, ms: this.state.maxsize } })
+                    return <Redirect to='/room/:{this.state.room_name}'/>;
                 } else {
-                    response.json().then(json => {
-                        toast.error(json.detail, {
-                            position: "top-center", autoClose: 4000, hideProgressBar: false,
-                            closeOnClick: true, pauseOnHover: false, draggable: true, progress: undefined
-                        });
-                    })
+
                 }
             })
 

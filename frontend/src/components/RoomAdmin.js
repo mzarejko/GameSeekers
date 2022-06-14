@@ -67,12 +67,12 @@ class RoomAdmin extends React.Component {
                     })
                     this.props.history.push({ pathname: "/roomlist" })
                 } else {
-                    response.json().then(json => {
-                        toast.error(json.detail, {
-                            position: "top-center", autoClose: 4000, hideProgressBar: false,
-                            closeOnClick: true, pauseOnHover: false, draggable: true, progress: undefined
-                        });
-                    })
+                    // response.json().then(json => {
+                    //     toast.error(json.detail, {
+                    //         position: "top-center", autoClose: 4000, hideProgressBar: false,
+                    //         closeOnClick: true, pauseOnHover: false, draggable: true, progress: undefined
+                    //     });
+                    // })
                 }
             })
         } catch (err) {

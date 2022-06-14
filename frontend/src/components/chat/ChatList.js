@@ -123,11 +123,11 @@ class ChatList extends Component {
             onChange={this.updateMessageInput}
             value={this.state.typedNewChatName}
             type="text"
-            placeholder="chat name"
+            placeholder="nazwa nowego czatu..."
           />
           <div className='popupbuttons'>
-          <button onClick={this.createChat}>create</ button>
-          <button onClick={()=>{this.changeMode(undefined, undefined)}}>cancel</ button>
+          <button onClick={this.createChat}>akceptuj</ button>
+          <button onClick={()=>{this.changeMode(undefined, undefined)}}>anuluj</ button>
           </div>
         </div>
       )
@@ -138,10 +138,10 @@ class ChatList extends Component {
     if (this.state.currentMode == this.mode.DELETE){
       return (
         <div className='popup'>
-          <p>Are you sure you want to delete this chat?</p>
+          <p>Czy jesteś pewien, że chcesz usunąc ten czat?</p>
           <div className='popupbuttons'>
-            <button onClick={()=>{this.deleteChat(this.state.currentChat)}}>yes</button>
-            <button onClick={()=> {this.changeMode(undefined, undefined)}}>no</button>
+            <button onClick={()=>{this.deleteChat(this.state.currentChat)}}>tak</button>
+            <button onClick={()=> {this.changeMode(undefined, undefined)}}>nie</button>
           </div>
         </div>
       )
@@ -157,11 +157,11 @@ class ChatList extends Component {
             onChange={this.updateMessageInput}
             value={this.state.typedChatName}
             type="text"
-            placeholder="new name for chat"
+            placeholder="nowa nazwa czatu.."
           />
           <div>
-            <button onClick={()=> {this.editChat(this.state.currentChat)}}>accept</ button>
-            <button onClick={()=>{this.changeMode(undefined, undefined)}}>cancel</ button>
+            <button onClick={()=> {this.editChat(this.state.currentChat)}}>akceptuj</ button>
+            <button onClick={()=>{this.changeMode(undefined, undefined)}}>anuluj</ button>
           </div>
         </div>
       )

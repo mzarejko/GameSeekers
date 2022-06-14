@@ -1,4 +1,47 @@
 @media only screen and (max-width: 600px) {
+
+  
+.img22{
+    background-image: url("../images/party.jpg");
+    background-size: cover;
+}
+.img33{
+    background-image: url("../images/friends.jpg");
+    background-size: cover;
+}
+.img11{
+  background-image: url("../images/chess.jpg");
+  background-size: cover;                                                                                                                                                                                                                                                                                                                                                     
+}
+.img11 div, .img22 div, .img33 div{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255,255, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.text-panel {
+  padding: 0;
+
+}
+.text-panel p{
+  padding: 0 30px;
+
+}
+.img1{
+  display: none;
+}
+.img2{
+  display: none;
+}
+.img3{
+  display: none;
+}
+}
+
+@media only screen and (max-width: 600px) {
     
     .login-page-container, .register-page-container {
         background-color: white;
@@ -12,7 +55,9 @@
         box-shadow: none;
         
       }
-
+      .roomListItem a{
+        width: 100px;
+      }
       .login-page-container *, .register-page-container * {
         margin-bottom: 20px !important;
       }
@@ -21,6 +66,21 @@
         width: 100%;
         
       }
+      .gamesListItem {
+        margin: 50px;
+        width: 100%;
+        height: 200px;
+        border-radius: 5px;
+        box-shadow: 8px 8px 24px 0px rgb(66 68 90);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+    .panel-left-side, .panel2-right-side {
+      width: 100%;
+      height: 260px;
+  }
 
       .roomListItem {
         flex-direction: column;

@@ -44,7 +44,7 @@ class LoginPage extends React.Component {
         }).then((response) => {
             localStorage.setItem('access_token', response.data.access);
             localStorage.setItem('refresh_token', response.data.refresh);
-            localStorage.setItem('currentUser', 'test123')
+            localStorage.setItem('currentUser', this.state.username)
             this.setState({redirect: response.status})
         }).catch((error) => {
 
