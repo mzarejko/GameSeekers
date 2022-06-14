@@ -66,14 +66,14 @@ class LoginPage extends React.Component {
                     type="text"
                     value={this.state.username}
                     onChange={this.changeValue}
-                    placeholder = "username"
+                    placeholder = "nazwa użytkownika"
                 /> 
                 <input
                     name="password"
                     type="password"
                     value={this.state.password}
                     onChange={this.changeValue}
-                    placeholder = "password"
+                    placeholder = "hasło"
                 />
                 <div className='btn-container'>
                 <button className='btn' onClick={this.submit}>Zaloguj się</button>

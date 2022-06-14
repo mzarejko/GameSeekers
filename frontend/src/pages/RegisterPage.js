@@ -96,7 +96,7 @@ class RegisterPage extends React.Component {
                     type="text"
                     value={this.state.username}
                     onChange={this.changeValue}
-                    placeholder = "username"
+                    placeholder = "nazwa użytkownika"
                 /> 
                 <input
                     name="email"
@@ -110,16 +110,16 @@ class RegisterPage extends React.Component {
                     type="password"
                     value={this.state.password1}
                     onChange={this.changeValue}
-                    placeholder = "Password"
+                    placeholder = "Hasło"
                 />
                 <input
                     name="password2"
                     type="password"
                     value={this.state.password2}
                     onChange={this.changeValue}
-                    placeholder = "repeat"
+                    placeholder = "Powtórz hasło"
                 />
-                <button className='btn' onClick={this.submit}>login</button> 
+                <button className='btn' onClick={this.submit}>Zaloguj</button> 
             </div>
         );
     }}
