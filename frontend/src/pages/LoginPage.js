@@ -76,13 +76,13 @@ class LoginPage extends React.Component {
                     placeholder = "password"
                 />
                 <div className='btn-container'>
-                <button className='btn' onClick={this.submit}>login</button>
+                <button className='btn' onClick={this.submit}>Zaloguj się</button>
                 </div>
-                <p>If you don't have account -{'>'} <Link to={{ pathname: "/register" }}>Register</Link></p> 
+                <p>Jeśli nie masz konta -{'>'} <Link to={{ pathname: "/register" }}>Rejestracja</Link></p> 
 
             
            <form onSubmit={this.logout_user} hidden={localStorage.getItem("currentUser")==null}>
-                    <button className='btn' type="submit">Logout</button>
+                    <button className='btn' type="submit">Wyloguj</button>
                 </form>
                 </div>
         );
